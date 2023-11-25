@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const olxAds = require('../models/olxAds')
-
+const Users = require('../models/user')
 
 router.get('/', async (req, res) => {
 
@@ -86,5 +86,67 @@ router.post('/addData', async (req, res) => {
 //   })
 // })
 
+
+router.post('/register', async (req, res) => {
+    try {
+        const credentials = req.body
+        const user = new Users(credentials)
+        await user.save()
+
+        res.send({
+            message: 'User Registered Successfully!'
+        })
+    } catch (e) {
+        res.send({
+            message: e
+        })
+    }
+})
+
+
+
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body
+  
+    //Step 1: User exists karta hai ya nahi.
+    const userExists = await Users.findOne({ email, password })
+  
+    if (!userExists) {
+      res.send({
+        message: "User doesn't exist!"
+      })
+      return
+    }
+  
+    console.log('userExists', userExists)
+    console.log('password', password)
+  
+    //Step 2: Check Password
+  
+    usersSchema.methods.comparePassword = function (password) {
+      const user = this
+      bcryptjs.compareSync(password, user.password)
+      return bcryptjs.compareSync(password, user.password)
+  
+      if (!isPasswordCorrect) {
+        res.send({
+          message: "Invalid Password"
+        })
+      }
+    }
+  
+  
+  
+    UsersSchema.methods.generateToken = function () {
+      const user = this
+      const token = jwt.sign({ _id: user._id, secret })
+      return token
+    }
+    // Step 3: Generate Token
+//   const Users = mongoose.model
+  
+  })
+
+  
 
 module.exports = router

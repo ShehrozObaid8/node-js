@@ -21,3 +21,4 @@ const olxAdsSchema = new Schema({
 const olxAds = mongoose.model('olx ads', olxAdsSchema);
 
 module.exports = olxAds;
+
